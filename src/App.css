@@ -1,0 +1,43 @@
+body{
+  overflow-x: hidden;
+  margin: 0;
+  padding: 0;
+  background-image: url('src/Images/background.jpg');
+  background-size: cover;
+  background-position: center;
+}
+#headerField{
+  background-color: rgb(198, 240, 226);
+  position:relative;
+  text-align: center;
+
+}
+#head1{
+  text-align: center;
+  font-size: 47px;
+  margin-top: 70px;
+  color: rgb(130, 194, 194);
+  text-shadow: 1px 1px 3px black;
+}
+
+#linksHeadMenue{
+  position:absolute;
+  top: 100%;
+  left: 0;
+  width: 100%;
+  display: flex;
+ justify-content: center;
+ background-color: rgb(174, 226, 226);
+ font-size: 20px;
+}
+
+#linksHeadMenue >*{
+  display:inline-block;
+  margin-right:150px; 
+  
+  
+}
+.container{
+  width: 80%;
+  margin: 0 auto;
+}
