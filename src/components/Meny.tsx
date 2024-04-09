@@ -1,3 +1,8 @@
+import Booking from "./Booking";
+import Offers from "./Offers";
+import OmOss from "./OmOss";
+import OpeningTimes from "./OpeningTimes";
+
 function Meny() {
     return (
         <div id='headerField'>
@@ -6,10 +11,10 @@ function Meny() {
         <h1 id='head1'>Heaven SPA</h1>
   
        <div id='linksHeadMenue'>
-       <a >om oss</a>
-       <a >erbjudanden</a>
-       <a >boka</a>
-       <a >öppettider</a>
+       <OmOss/>
+       <Offers/>
+       <Booking/>
+       <OpeningTimes/>
        </div>
     
          </div>
