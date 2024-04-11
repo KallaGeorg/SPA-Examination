@@ -1,0 +1,35 @@
+.tableContainer{
+    display:inline-flex;
+    
+}
+.tableBackground1{
+    background-color: rgb(252, 101, 101);
+    margin-right: 70px;
+    margin-left: 20px;
+    border-radius: 10px;
+    border: 2px solid black;
+}
+.tableBackground2{
+    background-color: rgb(76, 230, 222);
+    margin-right: 20px;
+    margin-left: 70px;
+    border-radius: 10px;
+    border: 2px solid black;
+}
+.booked{
+    cursor: pointer;
+    background-color: rgb(223, 123, 41);
+    border: 2px solid black;
+    border-radius: 10px;
+    margin-right: 70px; /* Adjust margin-right according to your layout */
+    margin-left: 20px;
+}
+.available{
+    cursor: pointer;
+  background-color: transparent;
+  border: 2px solid black;
+  border-radius: 10px;
+  margin-right: 20px; /* Adjust margin-right according to your layout */
+  margin-left: 70px; 
+
+}

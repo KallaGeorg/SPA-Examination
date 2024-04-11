@@ -1,0 +1,43 @@
+{
+  "bookings": [
+    {
+      "id": "8c37",
+      "userCredentials": {
+        "name": "Astrid",
+        "email": "Astrid@webb"
+      },
+      "bookingState": [
+        {
+          "id": 1,
+          "name": "Förmiddag",
+          "isBooked": false
+        },
+        {
+          "id": 2,
+          "name": "Eftermiddag",
+          "isBooked": false
+        },
+        {
+          "id": 3,
+          "name": "Kväll",
+          "isBooked": true
+        },
+        {
+          "id": 1,
+          "name": "Förmiddag",
+          "isBooked": true
+        },
+        {
+          "id": 2,
+          "name": "Eftermiddag",
+          "isBooked": false
+        },
+        {
+          "id": 3,
+          "name": "Kväll",
+          "isBooked": false
+        }
+      ]
+    }
+  ]
+}

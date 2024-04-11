@@ -17,7 +17,8 @@ body{
   font-size: 47px;
   margin-top: 70px;
   color: rgb(130, 194, 194);
-  text-shadow: 1px 1px 3px black;
+  text-shadow: 1px 1px 1px black;
+  
 }
 
 #linksHeadMenue{
@@ -30,7 +31,8 @@ body{
  background-color: rgb(174, 226, 226);
  font-size: 20px;
  color: rgb(147, 224, 208);
- text-shadow: 1px 1px 3px black;
+ text-shadow: 1px 1px 1px black;
+ text-align: center;
 }
 
 #linksHeadMenue >*{
@@ -56,7 +58,7 @@ body{
   font-size: 16px;
   border: none;
   cursor: pointer;
-  text-shadow: 1px 1px 3px black;
+  text-shadow: 1px 1px 1px black;
   border-radius: 15px;
 }
 
@@ -91,4 +93,16 @@ body{
 
 .dropdown:hover .dropbtn {
   background-color: #90e7e0;
+}
+.bookingHeader{
+  color: floralwhite;
+}
+.calendar{
+  height: 200px;
+  width: 850px;
+  color: floralwhite;
+}
+.bookingForm{
+  background-color: #45c6dd;
+  color: floralwhite;
 }

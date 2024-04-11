@@ -1,6 +1,6 @@
 import Booking from "./Booking";
 import Offers from "./Offers";
-import OmOss from "./OmOss";
+
 import OpeningTimes from "./OpeningTimes";
 
 function Meny() {
@@ -11,7 +11,7 @@ function Meny() {
         <h1 id='head1'>Heaven SPA</h1>
   
        <div id='linksHeadMenue'>
-       <OmOss/>
+   
        <Offers/>
        <Booking/>
        <OpeningTimes/>
