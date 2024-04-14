@@ -9,10 +9,16 @@ interface Day {
     helgdag: string;
     'arbetsfri dag': string;
 }
+interface FieldData {
+    id: number;
+    name: string;
+    isBooked: boolean;
+  }
 const yearsToFetch = [2024, 2025]; 
 function Booking() {
     const [nonBookableDays, setNonBookableDays] = useState<Date[]>([]);
     const [selectedDate, setSelectedDate] = useState<Date | null>(null);
+    const [fieldStates, setFieldStates] = useState<{ [date: string]: FieldData[] }>({});
     // eslint-disable-next-line react-hooks/exhaustive-deps
     
     useEffect(() => {
@@ -21,23 +27,23 @@ function Booking() {
             for (const year of yearsToFetch) {
                 const response = await fetch(`http://sholiday.faboul.se/dagar/v2.1/${year}`);
                 const data: { dagar: Day[] } = await response.json();
-                console.log("Data,", data);
                 
-       // Funktion för att kontrollera om en dag är en helgdag eller måndag
+                
+     
 const isNonBookableDay = (day: Day) => {
     if (day['helgdag']) {
-        return true; // Om det är en helgdag, returnera true
+        return true; 
     }
     if (day['veckodag'] === 'Måndag') {
-        return true; // Om det är måndag, returnera true
+        return true;
     }
-    return false; // Annars, returnera false
+    return false; 
 };
 
 // Filtera ut endast de dagar som är helgdagar eller måndagar
     const nonBookableDates = data.dagar.filter(day => isNonBookableDay(day)).map(day => {
-    const [year, month] = day.datum.split("-").map(Number);
-    return new Date(Date.UTC(year, month - 1, parseInt(day.datum.split("-")[2]))); 
+    const [year, month, dayOfMonth] = day.datum.split("-").map(Number); 
+    return new Date(year, month - 1, dayOfMonth);
 });
 
 
@@ -51,37 +57,40 @@ const isNonBookableDay = (day: Day) => {
         fetchNonBookableDays();
     }, []);
     
-     const handleDateClick = (date: Date) =>{
-        setSelectedDate(date);
-     }
-     
+    const handleDateClick = (date: Date) => {
+        setSelectedDate(date); 
+    };
+ 
+    const handleFieldStates = (date: string, states: FieldData[]) => {
+        setFieldStates(prevStates => ({
+            ...prevStates,
+            [date]: states
+        }));
+    };
     return (
         <div className="dropdown">
             <button className="dropbtn">Bokning</button>
             <div className="dropdown-content">
-                
                 <h1 className='bookingHeader'>Boka tid</h1>
-                
-                <Calendar 
-                 className={"calendar"}
-                 tileDisabled={({ date }) =>
-                 nonBookableDays.some(
-                 (nonBookableDate) => {
-                const utcDate = new Date(Date.UTC(date.getFullYear(), date.getMonth(), date.getDate()));
-                const utcNonBookableDate = new Date(Date.UTC(nonBookableDate.getFullYear(), nonBookableDate.getMonth(), nonBookableDate.getDate()));
-                return utcNonBookableDate.getTime() === utcDate.getTime();
-            }
-        )
-    }
-    onClickDay={(date)=> handleDateClick(date)}
-    
-/>
-
+                    <Calendar 
+                    className={"calendar"}
+                    tileDisabled={({ date }) =>
+                        nonBookableDays.some(nonBookableDate => date.getTime() === nonBookableDate.getTime())
+                    }
+                    onClickDay={handleDateClick}
+                />
                 {selectedDate && (
                     <div className='bookingForm'>
-                        <h2>Bokning för {selectedDate.toDateString()}</h2>
-                        <BookingForm onCancel={()=> setSelectedDate(null)} />
+                      
+                        <BookingForm
+                         selectedDate={selectedDate}
+                         fieldStates ={fieldStates[selectedDate.toISOString()] || [] }  
+                         onCancel={()=> setSelectedDate(null)} 
+                         getFieldStates={(states) => handleFieldStates(selectedDate.toISOString(), states)}
+                         initialFieldStates={{ [selectedDate.toISOString()]: fieldStates[selectedDate.toISOString()] || [] }}
+                          />
                     </div>
+                
                     
                 )}
 
@@ -91,3 +100,7 @@ const isNonBookableDay = (day: Day) => {
     );
 }
 export default Booking;
+
+
+
+
