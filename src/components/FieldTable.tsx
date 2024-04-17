@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import "./BookingForm.css";
 interface FieldData {
   id: number;
@@ -6,44 +6,19 @@ interface FieldData {
   isBooked: boolean;
 }
 
-interface Props{
-  selectedDate: Date;
-  onFieldClick:(fieldId: number) => void;
-  
-  getFieldStates: (states: FieldData[]) => void;
-  initialFieldStates: FieldData[];
-  onFieldStatesChange: (updatedFields: FieldData[]) => void;
+interface TableProps {
+  fields: FieldData[];
+ handleFieldClick: (fieldId: number, isTable1: boolean) => void; 
+  isTable1: boolean;
 }
+
+const FieldTable: React.FC<TableProps> = ({ fields,  handleFieldClick, isTable1}) => {
+  // const handleFieldClick = (fieldId: number) => {
+   
+  //   onFieldClick(fieldId);
+  // };
   
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-const IndependentFieldTable: React.FC<Props> = ({selectedDate, onFieldClick, onFieldStatesChange,getFieldStates, initialFieldStates}) => {
-  const [fields, setFields] = useState<FieldData[]>(
-    initialFieldStates.length > 0
-      ? initialFieldStates
-      : [
-          { id: 1, name: "Förmiddag", isBooked: false },
-          { id: 2, name: "Eftermiddag", isBooked: false },
-          { id: 3, name: "Kväll", isBooked: false },
-        ]
-  );
-
-  const handleFieldClick = (fieldId: number) => {
-    onFieldClick(fieldId);
-    setFields((prevFields) => {
-      return prevFields.map((field) =>
-        field.id === fieldId ? { ...field, isBooked: !field.isBooked } : field
-      );
-    });
-  };
-
-
-  useEffect(() => {
-    
-    onFieldStatesChange(fields);
-  }, [fields, onFieldStatesChange]);
   return (
-    <div>
-      <h2>Selected Date: {selectedDate.toDateString()}</h2>
     <table>
       <thead>
         <tr>
@@ -56,26 +31,19 @@ const IndependentFieldTable: React.FC<Props> = ({selectedDate, onFieldClick, onF
         {fields.map((field) => (
           <tr 
             key={field.id}
-            onClick={() => handleFieldClick(field.id)}
+            onClick={() => handleFieldClick(field.id, isTable1)}
             className={field.isBooked ? "booked" : "available"}
           >
             <td>{field.id}</td>
             <td>{field.name}</td>
             <td>{field.isBooked ? "Bokad" : "Ledig"}</td>
+        
           </tr>
         ))}
+       
       </tbody>
     </table>
-    </div>
-    
   );
 };
-export default IndependentFieldTable;
 
-
-
-
-
-
-
-
+export default FieldTable;
