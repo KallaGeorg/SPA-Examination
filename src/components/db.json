@@ -1,42 +1,45 @@
 {
   "bookings": [
     {
-      "id": "53e1",
+      "id": "cee1",
       "bookingState": [
         {
-          "id": 1,
+          "idField": 1,
           "name": "Förmiddag",
           "isBooked": true,
           "chosenDate": "2024-04-02T22:00:00.000Z"
         },
         {
-          "id": 2,
+          "idField": 2,
           "name": "Eftermiddag",
-          "isBooked": false
+          "isBooked": true,
+          "chosenDate": "2024-04-02T22:00:00.000Z"
         },
         {
-          "id": 3,
+          "idField": 3,
           "name": "Kväll",
-          "isBooked": false
+          "isBooked": true,
+          "chosenDate": "2024-04-02T22:00:00.000Z"
         },
         {
-          "id": 1,
+          "idField": 1,
           "name": "Förmiddag",
-          "isBooked": false
+          "isBooked": true,
+          "chosenDate": "2024-04-02T22:00:00.000Z"
         },
         {
-          "id": 2,
+          "idField": 2,
           "name": "Eftermiddag",
-          "isBooked": false
+          "isBooked": true,
+          "chosenDate": "2024-04-02T22:00:00.000Z"
         },
         {
-          "id": 3,
+          "idField": 3,
           "name": "Kväll",
           "isBooked": true,
           "chosenDate": "2024-04-02T22:00:00.000Z"
         }
-      ],
-      "selectedDate": "2024-04-02T22:00:00.000Z"
+      ]
     }
   ]
 }

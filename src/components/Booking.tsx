@@ -1,6 +1,10 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import Calendar from "react-calendar";
 import BookingForm from './BookingForm';
+interface BookingData {
+  bookingState: FieldData[];
+  selectedDate: string;
+}
 
 interface Day {
     flaggdag: string;
@@ -64,8 +68,6 @@ const isNonBookableDay = (day: Day) => {
     return new Date(Date.UTC(year, month - 1, parseInt(day.datum.split("-")[2]))); 
 });
 
-
-    
                 allNonBookableDates.push(...nonBookableDates);
             }
     
@@ -74,27 +76,66 @@ const isNonBookableDay = (day: Day) => {
     
         fetchNonBookableDays();
     }, []);
-    
-     const handleDateClick = (date: Date) =>{
-        console.log("Date clicked:", date);
-        setSelectedDate(date);
-     }
-     useEffect(() => {
-        // Call handleDateLogout when selectedDate changes and is null
-        if (selectedDate === null) {
-          handleDateLogout();
+
+    useEffect(() => {
+        if (selectedDate !== null) {
+            handleDateClick(selectedDate);
         }
-      }, [selectedDate]);
+    }, [selectedDate]);
     
-      const handleDateLogout = () => {
-        console.log("HandleDatelogout called...");
-        // Reset fields1 and fields2 to their initial unbooked state
-        setFields1(initialFields1);
-        setFields2(initialFields2);
-        // Clear the selectedDate state
-        setSelectedDate(null);
-      };
+    const handleDateClick = async (date: Date) => {
+      console.log("Date clicked:", date);
+      setSelectedDate(date);
+      try {
+          const response = await fetch("http://localhost:3000/bookings");
+          if (!response.ok) {
+              throw new Error("Failed to fetch booking data");
+          }
+          const data: BookingData[] = await response.json();
+          console.log("Data:", data);
+  
+          const selectedDateISOString = date.toISOString().split('T')[0]; // Extract date portion only
+          const bookingStateFound = data.find(item => item.selectedDate.split('T')[0] === selectedDateISOString);
+  
+          if (bookingStateFound && bookingStateFound.bookingState) {
+              const bookingState = bookingStateFound.bookingState;
+              console.log("Booking state:", bookingState);
+              const newSelectedDate = new Date(bookingStateFound.selectedDate); 
+              setFields1(bookingState.slice(0, 3));
+              setFields2(bookingState.slice(3));
+              setSelectedDate(newSelectedDate);
+          } else {
+              console.error("Booking state data not found");
+              setFields1(initialFields1);
+              setFields2(initialFields2);
+          }
+      } catch (error) {
+          console.error("Error", error);
+          setFields1(initialFields1);
+          setFields2(initialFields2);
+      }
+  };
+  
+  
+
+     
+    //  useEffect(() => {
+    //     // Call handleDateLogout when selectedDate changes and is null
+    //     if (selectedDate === null) {
+    //       handleDateLogout();
+    //     }
+    //   }, [selectedDate]);
+    
+    //   const handleDateLogout = () => {
+    //     console.log("HandleDatelogout called...");
+    //     // Reset fields1 and fields2 to their initial unbooked state
+    //     setFields1(initialFields1);
+    //     setFields2(initialFields2);
+    //     // Clear the selectedDate state
+    //     setSelectedDate(null);
+    //   };
     return (
+        
         <div className="dropdown">
         <button className="dropbtn">Bokning</button>
         <div className="dropdown-content">
@@ -112,13 +153,19 @@ const isNonBookableDay = (day: Day) => {
                 const utcDate = new Date(Date.UTC(date.getFullYear(), date.getMonth(), date.getDate()));
                 const utcNonBookableDate = new Date(Date.UTC(nonBookableDate.getFullYear(), nonBookableDate.getMonth(), nonBookableDate.getDate()));
                 return utcNonBookableDate.getTime() === utcDate.getTime();
-            }
-        )
-    }
-    onClickDay={(date)=> handleDateClick(date)}
+              }
+            )
+          }
+          onClickDay={(date)=> handleDateClick(date)}
     
-/>
-
+           />
+           
+         <div>
+        {/* Other JSX elements just to get ridd of the mistake.*/}
+        <input type="hidden" value={JSON.stringify(fields1)} />
+        <input type="hidden" value={JSON.stringify(fields2)} />
+        {/* Other JSX elements */}
+             </div>
                 {selectedDate && (
                     <div className='bookingForm'>
                         <h2>Bokning för {selectedDate.toDateString()}</h2>
@@ -134,6 +181,7 @@ const isNonBookableDay = (day: Day) => {
       </div>
     );
 }
+
 
 
 export default Booking;

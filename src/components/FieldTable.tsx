@@ -1,7 +1,7 @@
 import React from "react";
 import "./BookingForm.css";
 interface FieldData {
-  id: number;
+  idField: number;
   name: string;
   isBooked: boolean;
 }
@@ -30,11 +30,11 @@ const FieldTable: React.FC<TableProps> = ({ fields,  handleFieldClick, isTable1}
       <tbody>
         {fields.map((field) => (
           <tr 
-            key={field.id}
-            onClick={() => handleFieldClick(field.id, isTable1)}
+            key={field.idField}
+            onClick={() => handleFieldClick(field.idField, isTable1)}
             className={field.isBooked ? "booked" : "available"}
           >
-            <td>{field.id}</td>
+            <td>{field.idField}</td>
             <td>{field.name}</td>
             <td>{field.isBooked ? "Bokad" : "Ledig"}</td>
         

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import "./BookingForm.css";
 import FieldTable from "./FieldTable";
 
@@ -11,21 +11,21 @@ interface Props {
    setSelectedDate: (date: Date | null) => void; 
 }
 interface FieldData {
-  id: number;
+  idField: number;
   name: string;
   isBooked: boolean;
-  chosenDate?: Date | null;
+  chosenDate: Date | null;
 }
 const initialFields1: FieldData[] = [
-  { id: 1, name: "Förmiddag", isBooked: false },
-  { id: 2, name: "Eftermiddag", isBooked: false },
-  { id: 3, name: "Kväll", isBooked: false },
+  { idField: 1, name: "Förmiddag", isBooked: false, chosenDate: null },
+  { idField: 2, name: "Eftermiddag", isBooked: false, chosenDate: null },
+  { idField: 3, name: "Kväll", isBooked: false, chosenDate: null },
 ];
 
 const initialFields2: FieldData[] = [
-  { id: 1, name: "Förmiddag", isBooked: false },
-  { id: 2, name: "Eftermiddag", isBooked: false },
-  { id: 3, name: "Kväll", isBooked: false },
+  { idField: 1, name: "Förmiddag", isBooked: false, chosenDate: null },
+  { idField: 2, name: "Eftermiddag", isBooked: false,chosenDate: null },
+  { idField: 3, name: "Kväll", isBooked: false, chosenDate: null },
 ];
 
 
@@ -50,7 +50,7 @@ const BookingForm: React.FC<Props> = ({ onCancel, selectedDate, setSelectedDate 
       if (isTable1) {
         setFields1(prevFields =>
           prevFields.map(field =>
-            field.id === fieldId
+            field.idField === fieldId
               ? { ...field, isBooked: true, chosenDate: localSelectedDate }
               : field
           )
@@ -58,7 +58,7 @@ const BookingForm: React.FC<Props> = ({ onCancel, selectedDate, setSelectedDate 
       } else {
         setFields2(prevFields =>
           prevFields.map(field =>
-            field.id === fieldId
+            field.idField === fieldId
               ? { ...field, isBooked: true, chosenDate: localSelectedDate }
               : field
           )
@@ -73,34 +73,35 @@ const BookingForm: React.FC<Props> = ({ onCancel, selectedDate, setSelectedDate 
     };
     
 
-  useEffect(() => {
-    fetchData(setSelectedDate);
-  }, [setSelectedDate]);
+  // useEffect(() => {
+  //   fetchData(setSelectedDate);
+  // }, [setSelectedDate]);
 
  
 
   const handleBook = async () => {
     try {
       const allFields = [...fields1, ...fields2];
-      
-      // Create a new Date object with the selectedDate
+      const bookingData = {
+        bookings: allFields,
+      };
+    
       let selectedDatePlusOneDay: Date | null = null;
       if (selectedDate) {
         selectedDatePlusOneDay = new Date(selectedDate);
         selectedDatePlusOneDay.setDate(selectedDatePlusOneDay.getDate() + 1); // Add one day
       }
   
-      const bookingData = {
-        bookingState: allFields,
-        selectedDate: selectedDatePlusOneDay, // Use the updated selectedDate
-      };
-      console.log('bookingData:', bookingData);
-      const response = await fetch('http://localhost:3000/bookings', {
+     
+      console.log('bookingDataArray:', bookingData);
+      const response = await fetch('http://localhost:8080/bookings', {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(bookingData),
+        
+        body: JSON.stringify([bookingData]),
+        
       });
   
       if (response.ok) {
@@ -112,29 +113,6 @@ const BookingForm: React.FC<Props> = ({ onCancel, selectedDate, setSelectedDate 
       console.error("Error:", error);
     }
   };
-  
-  const fetchData = async (setSelectedDate: (date: Date) => void)=> {
-    try {
-      const response = await fetch("http://localhost:3000/bookings");
-      if (!response.ok) {
-        throw new Error("Failed to fetch booking data");
-      }
-      const data = await response.json();
-
-      if (data[0] && data[0].bookingState) {
-        const bookingState = data[0].bookingState;
-        const newSelectedDate = new Date(data[0].selectedDate); 
-        setFields1(bookingState.slice(0, 3));
-        setFields2(bookingState.slice(3));
-        setSelectedDate(newSelectedDate);
-      } else {
-        console.error("Booking state data not found");
-      }
-    } catch (error) {
-      console.error("Error", error);
-    }
-  };
-
 
   return (
     <>
@@ -144,22 +122,19 @@ const BookingForm: React.FC<Props> = ({ onCancel, selectedDate, setSelectedDate 
       <div className="tableContainer">
         <div className="tableBackground1">
         <h2>Varm</h2>
-        
         <FieldTable fields={fields1} handleFieldClick={(fieldId) => handleFieldClick(fieldId, true)} isTable1={true} />
-          
+        </div>
+        <div >
+        <button className="theButtons" onClick={handleBook}>Boka</button>
+        <button className="theButtons" onClick={onCancel}>Avbryt</button>
         </div>
       <div className="tableBackground2">
       <h2>Kall</h2>
-      
    <FieldTable fields={fields2} handleFieldClick={(fieldId) => handleFieldClick(fieldId, false)} isTable1={false} />
-        
-      
-        
       </div>
+   
       </div>
     </div>
-    <button onClick={handleBook}>Boka</button>
-     <button onClick={onCancel}>Avbryt</button>
     </>
    
   );
